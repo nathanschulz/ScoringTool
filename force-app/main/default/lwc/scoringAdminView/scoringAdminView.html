@@ -1,0 +1,31 @@
+<template>
+    <div class="scoring-view-wrapper">
+    	<div class="scoring-header">
+    		<span class="scoring-header-text">
+    			Enter Lead Score Conditions
+    		</span>
+    	</div>
+        <div class="button-wrapper">
+            <lightning-button onclick={newConditionSet} variant="brand" label="Add Condition" title="Primary action" class="slds-m-left_x-small"></lightning-button>
+        </div>
+    	<div class="conditions-list">
+    		<template if:true={loaded}>
+                <template for:each={conditionSets} for:item="conditionSet">
+        			<c-scoring-condition data-id={conditionSet.key} ondeletecondition={deleteCondition} key={conditionSet.key} condition-set={conditionSet}>
+        			</c-scoring-condition>
+        		</template>
+            </template>
+    	</div>
+        <div class="list-of-links">
+            <ul>
+                <template if:true={loaded}>
+                    <template for:each={conditionSets} for:item="conditionSet">
+                        <li key={conditionSet.key}><a href="#" onclick={scrollToConditionSet} data-conditionkey={conditionSet.key}>{conditionSet.description}</a></li>
+                    </template>
+                </template>
+            </ul>
+        </div>
+    	<div class="scoring-footer">
+    	</div>
+    </div>
+</template>

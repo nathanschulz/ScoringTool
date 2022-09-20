@@ -1,0 +1,73 @@
+.scoring-condition-wrapper {
+	border: thin solid black;
+	border-radius: 3px;
+	margin-top: 10px;
+	padding: 20px;
+	/*NATHAN TODO: fix width*/
+}
+
+.row-one {
+	display: block;	
+	margin: 10px;
+}
+
+.row-one > div {
+	display: inline-block;
+}
+
+.delete-wrapper {
+	float: right;
+}
+
+.description-wrapper {
+
+}
+
+.active-wrapper {
+	padding-left: 20px;
+}
+
+.description-text {
+	font-size: small;
+}
+
+.row-two {
+	display: block;
+	margin: 10px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.scoring-statement-wrapper > div, .logical-statement-wrapper {
+	display: inline-block;
+	margin-left: 5px;
+	/*border: thin solid black;*/
+}
+
+.save-condition-wrapper, .revert-condition-wrapper {
+	display:  inline-block;
+	float: right;
+	margin-top: 25px;
+}
+
+.row-three {
+	display: block;	
+}
+
+.row-four {
+	display: block;
+}
+
+.new-li-wrapper {
+	display: flex;
+}
+
+.centered {
+	margin: 0 auto;
+}
+
+.row-five {
+	display: block;	
+}

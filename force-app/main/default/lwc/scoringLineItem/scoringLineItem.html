@@ -1,0 +1,41 @@
+<template>
+    <div class="line-item-wrapper">
+    	<div class="item-row">
+    		<div class="number-wrapper">
+    			<lightning-input disabled type="text" label="#" value={lineItem.ruleNumber}>
+    			</lightning-input>
+    		</div>
+    		<div class="field-wrapper">
+    			<lightning-combobox
+                    data-id="field"
+                    name="Field"
+                    label="Field"
+                    value={lineItem.field}
+                    placeholder="SELECT"
+                    required
+                    options={fields}
+                    onchange={editLi}
+                ></lightning-combobox>
+    		</div>
+    		<div class="operator-wrapper">
+                <lightning-combobox
+                    data-id="operator"
+                    name="Operator"
+                    label="Operator"
+                    required
+                    value={lineItem.operator}
+                    placeholder="SELECT"
+                    options={options}
+                    onchange={editLi}
+                ></lightning-combobox>
+    		</div>
+    		<div class="operand-wrapper">
+    			<lightning-input required data-id="operand" type="text" label="Operand" value={lineItem.operand} onchange={editLi}>
+    			</lightning-input>
+    		</div>
+            <div class="delete-wrapper">
+                <lightning-icon onclick={deleteLi} data-id={lineItem.ruleNumber} class="pointer" size="x-small" icon-name="action:delete" alternative-text="Delete" title="Delete"></lightning-icon>
+            </div>
+    	</div>
+    </div>
+</template>

@@ -1,0 +1,93 @@
+<template>
+	<template if:true={conditionReady}>
+	    <div class="scoring-condition-wrapper">
+	    	<template if:true={loading}>
+				<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+			</template>
+	    	<div class="row-one">
+	    		<div class="description-wrapper">
+	    			<span class="description-text">
+	    				<lightning-input data-id="description" type="text" label="Condition Description" value={conditionSet.description} onchange={editCondition}>
+	    				</lightning-input>
+	    			</span>
+		    	</div>
+		    	<div class="active-wrapper">
+    				<lightning-input data-id="active" onchange={editCondition} type="checkbox" label="Active" value={conditionSet.active} checked={conditionSet.active}>
+    				</lightning-input>
+    			</div>
+		    	<div class="delete-wrapper">
+		    		<lightning-icon onclick={promptDeleteConfirmation} class="pointer" size="small" icon-name="action:delete" alternative-text="Delete" title="Delete"></lightning-icon>
+		    	</div>
+	    	</div>
+	    	<div class="row-two">
+	    		<div class="scoring-statement-wrapper">
+	    			<div class="object-type-input">
+	    				<lightning-combobox
+		                    data-id="objectType"
+		                    name="Condition Object"
+		                    label="Condition Object"
+		                    value={conditionSet.objectType}
+		                    placeholder="SELECT"
+		                    options={objectTypes}
+		                    onchange={editCondition}
+		                ></lightning-combobox>
+	    			</div>
+	    			<div class="positive-negative-wrapper">
+	    				<lightning-combobox
+		    				data-id="conditionDirection"
+		                    name="Direction"
+		                    label="Direction"
+		                    value={conditionSet.conditionDirection}
+		                    placeholder="SELECT"
+		                    options={directionChoices}
+		                    onchange={editCondition}
+		                ></lightning-combobox>
+	    			</div>
+	    			<div class="score-value-wrapper">
+	    				<lightning-input data-id="value" type="number" label="Point Value" value={conditionSet.value} onchange={editCondition}>
+	    				</lightning-input>
+	    			</div>
+	    			<div class="score-type-wrapper">
+	    				<lightning-combobox
+		    				data-id="scoreType"
+		                    name="Type"
+		                    label="Type"
+		                    value={conditionSet.scoreType}
+		                    placeholder="SELECT"
+		                    options={scoreTypes}
+		                    onchange={editCondition}
+		                ></lightning-combobox>
+	    			</div>
+		    	</div>
+	    	</div>
+	    	<div class="row-three">
+	    		<div class="scoring-line-items-wrapper">
+	    			<template for:each={lineItems} for:item="lineItem">
+		    			<c-scoring-line-item object-type={conditionSet.objectType} ondeleteli={deleteLi} key={lineItem.key} line-item={lineItem}>
+		    			</c-scoring-line-item>
+		    		</template>
+	    		</div>
+	    	</div>
+	    	<div class="row-four">
+	    		<div class="new-li-wrapper">
+	    			<lightning-icon onclick={addLineItem} class="pointer centered" size="x-small" icon-name="action:new" alternative-text="New" title="New"></lightning-icon>
+	    		</div>
+	    	</div>
+	    	<div class="row-five">
+	    		<div class="logical-statement-wrapper">
+	    			<lightning-input data-id="logicalStatement" onchange={editCondition} type="text" label="Logical Statement" value={conditionSet.logicalStatement}>
+    				</lightning-input>
+	    		</div>
+	    		<div class="save-condition-wrapper">
+	    			<lightning-button variant="brand" label="Save" title="Save" class="slds-m-left_x-small" disabled={disableSaveButton} onclick={saveCondition}></lightning-button>
+	    		</div>
+	    		<template if:true={revertEnabled}>
+		    		<div class="revert-condition-wrapper">
+		    			<lightning-button variant="brand" label="Revert" title="Revert" class="slds-m-left_x-small" onclick={revertCondition}></lightning-button>
+		    		</div>
+		    	</template>
+	    	</div>
+	    	
+	    </div>
+	</template>
+</template>

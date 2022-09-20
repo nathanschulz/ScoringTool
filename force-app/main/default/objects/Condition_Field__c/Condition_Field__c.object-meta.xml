@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Determines which fields to check in Object triggers.
+
+(Nathan Schulz September 2022)</description>
+    <enableFeeds>false</enableFeeds>
+    <label>Condition Field</label>
+    <visibility>Public</visibility>
+</CustomObject>

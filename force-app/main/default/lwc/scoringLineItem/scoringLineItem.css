@@ -1,0 +1,28 @@
+.line-item-wrapper {
+	padding: 5px;
+	/*nathan todo: fix width stuff*/
+}
+
+.item-row {
+	border: thin solid black;
+	border-radius: 3px;
+}
+
+.item-row > div {
+	display: inline-block;
+	padding: 3px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.number-wrapper {
+	width: 50px;
+}
+
+.delete-wrapper {
+	float: right;
+	margin-top: 16px;
+	margin-right: 10px;
+}
