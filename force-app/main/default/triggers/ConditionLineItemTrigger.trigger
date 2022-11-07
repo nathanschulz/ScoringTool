@@ -3,8 +3,12 @@ trigger ConditionLineItemTrigger on Condition_Line_Item__c (before insert, befor
 	Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
 
 	void setFieldType(Condition_Line_Item__c cli, String objectType) {
-        String fieldType = String.valueOf(schemaMap.get(objectType).getDescribe().fields.getMap().get(cli.Field__c.toLowercase()).getDescribe().getType());
-        cli.Field_Type__c = fieldType;
+        if (cli.Field__c.contains('.')) {
+        	cli.Field_Type__c = 'STRING';
+        } else {
+        	String fieldType = String.valueOf(schemaMap.get(objectType).getDescribe().fields.getMap().get(cli.Field__c.toLowercase()).getDescribe().getType());
+	        cli.Field_Type__c = fieldType;
+        }
     }
 
 
@@ -24,8 +28,10 @@ trigger ConditionLineItemTrigger on Condition_Line_Item__c (before insert, befor
     	Map<String,Condition_Field__c> conditionFieldsToInsert = new Map<String,Condition_Field__c>();
     	Set<String> touchedNames = new Set<String>();
     	for (Condition_Line_Item__c cli : conditionLineItems) {
+    		if (cli.Field__c.contains('.')) continue;
     		String name = cli.Condition_Set__r.Object_Type__c + '.' + cli.Field__c + '.' + cli.Condition_Set__r.Action__r.Action_Type__c;
     		name = name.toLowercase();
+    		name = name.left(35);
     		if (!touchedNames.add(name)) continue;
     		if (!currentConditionFields.containsKey(name)) conditionFieldsToInsert.put(name, new Condition_Field__c(
     			Name = name,

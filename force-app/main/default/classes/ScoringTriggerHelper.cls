@@ -11,9 +11,17 @@ public with sharing class ScoringTriggerHelper {
     }
 
     public String objectType {get; private set;}
+    public ConditionInterface cInterface {get; private set;}
 
     public ScoringTriggerHelper(String oType) {
         objectType = oType;
+        System.Type scoringInterfaceType = Type.forName('ScoringConditionInterface');
+        if(scoringInterfaceType != null) {
+            cInterface = (ConditionInterface)(scoringInterfaceType.newInstance());
+        } else {
+            cInterface = new ConditionInterface();
+        }
+      
     }
 
     public void process() {
@@ -21,14 +29,29 @@ public with sharing class ScoringTriggerHelper {
         Action_Configuration__mdt setting = Action_Configuration__mdt.getInstance(objectType);
         if (setting != null && setting.Master_Disable__c == true) return;
 
-        List<Lead> toEvaluate = recordsToReEvaluate(Trigger.new, Trigger.oldMap, Trigger.isInsert);
+        //customer can write custom code to set flags to trigger scoring conditions
+        cInterface.preScoringCallback(Trigger.new, Trigger.oldMap, Trigger.isInsert, objectType);
+
+        List<SObject> toEvaluate = recordsToReEvaluate(Trigger.new, Trigger.oldMap, Trigger.isInsert);
         System.debug('evalute length: ' + toEvaluate.size());
         if (!toEvaluate.isEmpty()) {
             System.debug('some evaluated');
             ScoringUtility su = new ScoringUtility();
-            List<Action_Log__c> logsToInsert = su.scoreLeads(toEvaluate);
+            List<Action_Log__c> logsToInsert;
+            if (objectType == 'Lead') {
+                logsToInsert = su.scoreLeads(toEvaluate);
+            } else if (objectType == 'CampaignMember') {
+                logsToInsert = su.scoreCampaignMembers(toEvaluate);
+            } else if (objectType == 'Contact') {
+                logsToInsert = su.scoreContacts(toEvaluate);
+            }
             if (logsToInsert != null && !logsToInsert.isEmpty()) Database.insert(logsToInsert, false);
         }
+
+    }
+
+    public void postProcess() {
+        cInterface.postScoringCallback(Trigger.new, Trigger.oldMap, Trigger.isInsert, objectType);
     }
 
     public List<String> getScoringFields() {

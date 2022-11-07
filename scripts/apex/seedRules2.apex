@@ -10,6 +10,7 @@ Action__c a3 = new Action__c(
 insert a3;
 
 Condition_Set__c a3cs1 = new Condition_Set__c(
+	Active__c = false,
 	Action__c = a3.Id,
 	Description__c = 'Website Form Submitted',
 	Logical_Statement__c = '1 AND 2',

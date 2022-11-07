@@ -19,8 +19,18 @@ public with sharing class ConditionUtility {
     public static final Set<String> STRING_TYPES = new Set<String> { 'STRING', 'EMAIL' , 'URL', 'ADDRESS', 'PHONE', 'MULTIPICKLIST', 'TEXTAREA', 'REFERENCE', 'PICKLIST' };
 
 
+    public static Object getSObjectValue(SObject obj, String attr) {
+        if (obj == null) return null;
+        List<String> splits = attr.split('\\.');
+        for(Integer i=0;i<splits.size()-1;i++) {
+          obj = obj.getSObject(splits[i]);
+          if(obj == null) return null;
+        }
+        return obj.get(splits[splits.size()-1]);
+    }
+
     public static Boolean objectMeetsCondition(SObject s, Condition_Line_Item__c cli) {
-        Object value = s.get(cli.Field__c);
+        Object value = getSObjectValue(s,cli.Field__c);
         Object operand = cli.Operand__c;
         String operator = cli.Operator__c;
         System.debug(value);
@@ -28,7 +38,7 @@ public with sharing class ConditionUtility {
         String fieldType = cli.Field_Type__c;
         
         if (fieldType == 'BOOLEAN') {
-            Boolean valueBoolean = Boolean.valueOf(value);
+            Boolean valueBoolean = value != null ? Boolean.valueOf(value) : false;
             Boolean operandBoolean = Boolean.valueOf(operand);
             if (operator == EQUALS_EXACT) {
                 return valueBoolean == operandBoolean;

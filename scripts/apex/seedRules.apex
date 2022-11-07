@@ -10,6 +10,7 @@ insert a1;
 
 Condition_Set__c a1cs1 = new Condition_Set__c(
 	Action__c = a1.Id,
+	Active__c = false,
 	Description__c = 'Non-Industry Email Address',
 	Logical_Statement__c = '1 OR 2 OR 3',
 	RPN_Logic__c = '1,2,OR,3,OR',
@@ -61,6 +62,7 @@ insert a2;
 
 Condition_Set__c a2cs1 = new Condition_Set__c(
 	Action__c = a2.Id,
+	Active__c = false,
 	Description__c = 'Valuable Title Segment',
 	Logical_Statement__c = '1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 OR 9 OR 10 OR 11 OR 12 OR 13 OR 14 OR 15 OR 16',
 	RPN_Logic__c = '1,2,OR,3,OR,4,OR,5,OR,6,OR,7,OR,8,OR,9,OR,10,OR,11,OR,12,OR,13,OR,14,OR,15,OR,16,OR',

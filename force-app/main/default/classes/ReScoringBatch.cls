@@ -2,15 +2,26 @@ public with sharing class ReScoringBatch implements Database.Batchable<SObject> 
     
     public static final Decimal DEGRADATION = 0.8;
 
-    public ReScoringBatch() {
+    public String batchMode {get; set;}
+    public Boolean scoreEngagement {get; set;}
+    public String objectType {get; set;}
+    public String whereClause {get; set;}
+    public String queryString {get; set;}
+    public DateTime campaignMemberStartDate {get;set;}
+    public DateTime campaignMemberCreatedDate {get;set;}
 
+    public ReScoringBatch() {
+        scoreEngagement = false;
+        campaignMemberCreatedDate = Datetime.now().addDays(-90);
+        campaignMemberStartDate = Datetime.now().addDays(-7);
     }
 
     public String getQueryString() {
-        String queryString = 'SELECT Id, LeadId, Lead.Engagement_Score__c, Engagement_Score__c, Score_Time__c';
-        queryString += ' FROM CampaignMember ';
-        queryString += ' WHERE Score_Time__c < LAST_N_DAYS:90';
-        return queryString;
+        if (queryString != null) return queryString;
+        String qString = 'SELECT Id, LeadId, Lead.Engagement_Score__c, Engagement_Score__c, Score_Time__c';
+        qString += ' FROM CampaignMember ';
+        qString += ' WHERE Score_Time__c < LAST_N_DAYS:90';
+        return qString;
     }
 
     public Database.QueryLocator start(Database.BatchableContext ctx) {
@@ -18,20 +29,30 @@ public with sharing class ReScoringBatch implements Database.Batchable<SObject> 
     }
 
     public void execute(Database.BatchableContext ctx, List<SObject> sobjectScope) {
-        DateTime currentJobTime = DateTime.now();
-        Map<Id,SObject> leadsToUpdate = new Map<Id,SObject>();
-        for (SObject campaignMemberUncast : sobjectScope) {
-            CampaignMember cm = (CampaignMember) campaignMemberUncast;
-            Lead cmLead = leadsToUpdate.containsKey(cm.LeadId) 
-                ? (Lead) leadsToUpdate.get(cm.LeadId) : new Lead(Id = cm.LeadId, Engagement_Score__c = cm.Lead.Engagement_Score__c);
-            leadsToUpdate.put(cmLead.Id, cmLead);
-            Decimal originalEngagementScore = cm.Engagement_Score__c;
-            Decimal currentEngagementScore = cm.Engagement_Score__c * DEGRADATION;
-            cmLead.Engagement_Score__c = cmLead.Engagement_Score__c - originalEngagementScore + currentEngagementScore;
-            cm.Engagement_Score__c = currentEngagementScore;
-            cm.Score_Time__c = currentJobTime;
+        if (batchMode == 'clearScore') {
+            for (SObject sobj : sobjectScope) {
+                sobj.put(ScoringUtility.ENGAGEMENT_SCORE_FIELD, 0);
+                if (objectType != 'CampaignMember') {
+                    sobj.put(ScoringUtility.FIT_SCORE_FIELD, 0);
+                    sobj.put('Overall_Score__c', '');
+                }
+            }
+        } else {
+            List<Action_Log__c> actionLogs = new List<Action_Log__c>();
+            ScoringUtility su = new ScoringUtility();
+            su.campaignMemberStartDate = campaignMemberStartDate;
+            su.campaignMemberCreatedDate = campaignMemberCreatedDate;
+            su.buildCMMap(sobjectScope);
+            if (objectType != 'CampaignMember') {
+                for (SObject s : sobjectScope) {
+                    Action_Log__c newLog = su.scoreSObject(s, objectType, scoreEngagement);
+                    if (newLog != null) actionLogs.add(newLog);
+                }
+            } else if (objectType == 'CampaignMember') {
+                actionLogs.addAll( su.scoreCampaignMembers((List<CampaignMember>)  sobjectScope) );
+            }
+            if (!actionLogs.isEmpty()) insert actionLogs;
         }
-        if (!leadsToUpdate.isEmpty()) update leadsToUpdate.values();
         update sobjectScope;
     }
 

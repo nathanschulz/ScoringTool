@@ -9,7 +9,7 @@ export default class ScoringCondition extends LightningElement {
 	@api conditionSet;
 	@api lineItems;
 	@api conditionReady = false;
-	objectTypes = [{value: "Lead", label: "If Lead Meets Condition"},{value: "CampaignMember", label: "For Each Campaign Member Meeting Condition"}];
+	objectTypes = [{value: "Lead", label: "If Lead Meets Condition"},{value: "Contact", label: "If Contact Meets Condition"},{value: "CampaignMember", label: "For Each Campaign Member Meeting Condition"}];
 	directionChoices = [{value: "Add", label: "Add"},{value: "Subtract", label: "Subtract"}];
 	scoreTypes = [{value: "fit", label: "fit"},{value:"engagement", label: "engagement"}];
 	loading = false;

@@ -31,6 +31,7 @@ insert a3;
 
 Condition_Set__c a3cs1 = new Condition_Set__c(
 	Action__c = a3.Id,
+	Active__c = false,
 	Description__c = 'Meeting Booked via Chat',
 	Logical_Statement__c = '1 AND 2',
 	RPN_Logic__c = '1,2,AND',

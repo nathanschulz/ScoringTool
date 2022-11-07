@@ -1,0 +1,3 @@
+ConditionUtilityTest,ConditionSetTriggerTest,ScoringAdminControllerTest,ScoringUtilityTest,ScoringTriggerHelperTest,ScoringConditionInterfaceTest,ConditionInterfaceTest
+
+ScoringUtilityTest,ReScoringBatchTest

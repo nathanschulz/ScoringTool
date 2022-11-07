@@ -8,7 +8,7 @@ private class ConditionUtilityTest {
         insert newAction;
         Condition_Set__c cs = new Condition_Set__c(
             Action__c = newAction.Id,
-            Logical_Statement__c = '1 OR (2 AND 3) OR 4 OR 5 OR 6 OR 7 OR 8',
+            Logical_Statement__c = '1 OR (2 AND 3) OR 4 OR 5 OR 6 OR 7 OR 8 OR 9',
             Object_Type__c = 'Lead'
         );
         insert cs;
@@ -68,6 +68,13 @@ private class ConditionUtilityTest {
             Operand__c = '50',
             Rule_Number__c = 8
         );
+        Condition_Line_Item__c cli9 = new Condition_Line_Item__c(
+            Condition_Set__c = cs.Id,
+            Field__c = 'IsConverted',
+            Operator__c = '!=',
+            Operand__c = 'true',
+            Rule_Number__c = 9
+        );
         insert cli1;
         insert cli2;
         insert cli3;
@@ -76,11 +83,12 @@ private class ConditionUtilityTest {
         insert cli6;
         insert cli7;
         insert cli8;
+        insert cli9;
     }
 
     @isTest
     static void testObjectMeetsConditionSet() {
-        Lead newLead = new Lead(LastName = 'Testly', Company = 'Test Co.');
+        Lead newLead = new Lead(LastName = 'Testly', Company = 'Test Co.', Email = 'xyz@test.com');
         insert newLead;
         List<Condition_Set__c> css = [SELECT
             Id, Logical_Statement__c, RPN_Logic__c, Object_Type__c, Description__c,

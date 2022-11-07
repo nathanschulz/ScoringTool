@@ -41,9 +41,8 @@ public with sharing class ScoringAdminController {
             conditionSetAction.Description__c = (String) conditionSetMap.get('description');
             conditionSetAction.Positive__c = (String) conditionSetMap.get('conditionDirection') == 'Add';
             conditionSetAction.Score_Type__c = (String) conditionSetMap.get('scoreType');
-            conditionSetAction.Value__c = (Decimal) conditionSetMap.get('value');
+            conditionSetAction.Value__c = Decimal.valueOf(String.valueOf(conditionSetMap.get('value')));
             insert conditionSetAction;
-            
 
             conditionSet.Action__c = conditionSetAction.Id;
             conditionSet.Description__c = (String) conditionSetMap.get('description');

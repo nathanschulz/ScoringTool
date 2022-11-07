@@ -2,7 +2,8 @@
 private class ReScoringSchedulerTest {
 
     @isTest
-    static void myUnitTest() {
-        // TO DO: implement unit test
+    static void testInstantiation() {
+        ReScoringScheduler rss = new RescoringScheduler();
+        System.assert(rss != null);
     }
 }

@@ -1,5 +1,10 @@
-trigger CampaignMemberScoreTrigger on CampaignMember (before insert, before update) {
-	ScoringUtility su = new ScoringUtility();
-	List<Action_Log__c> logsToInsert = su.scoreCampaignMembers(Trigger.new);
-	if (logsToInsert != null && !logsToInsert.isEmpty()) Database.insert(logsToInsert, false);
+trigger CampaignMemberScoreTrigger on CampaignMember (before update, before insert, after update, after insert) {
+
+	if (Trigger.isBefore) {
+		ScoringTriggerHelper sth = new ScoringTriggerHelper('CampaignMember');
+		sth.process();
+	} else if (Trigger.isAfter) {
+		ScoringTriggerHelper sth = new ScoringTriggerHelper('CampaignMember');
+		sth.postProcess();
+	}
 }
