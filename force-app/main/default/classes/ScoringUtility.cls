@@ -127,7 +127,7 @@ public with sharing class ScoringUtility {
         if (!recordsToUpdate.isEmpty()) {
             List<SObject> updateList = recordsToUpdate.values();
             for (SObject sobj : updateList) {
-                setOverallScore(sobj);
+                ScoringUtility.setOverallScore(sobj);
             }
             updateList.sort();
             ScoringUtility.SKIP_LEAD_TRIGGER = true;
@@ -261,7 +261,7 @@ public with sharing class ScoringUtility {
         return newLog;
     }
 
-    public void setOverallScore(SObject sobj) {
+    public static void setOverallScore(SObject sobj) {
         String fit;
         String engagementLevel;
         Decimal fitScore = (Decimal) sobj.get('Fit_Score__c');
@@ -344,7 +344,7 @@ public with sharing class ScoringUtility {
         }
         sobj.put(FIT_SCORE_FIELD, fitScore);
         sobj.put(ENGAGEMENT_SCORE_FIELD, engagementScore);
-        setOverallScore(sobj);
+        ScoringUtility.setOverallScore(sobj);
         newLog.Rep_Summary__c = String.join(repStatements, '\n');
         newLog.Admin_Summary__c = String.join(adminStatements, '\n');
         newLog.Previous_Engagement_Score__c = prevEngagementScore;

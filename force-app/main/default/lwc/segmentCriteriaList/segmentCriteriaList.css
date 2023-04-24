@@ -1,0 +1,12 @@
+.criterion-row {
+	border: black;
+}
+
+.sort-cell {
+	max-width: 60px;
+	width: 60px;
+}
+
+table > tbody > tr > td.my-vertical-padding {
+  padding: 10px 0;
+}

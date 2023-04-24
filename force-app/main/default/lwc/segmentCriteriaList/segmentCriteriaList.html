@@ -1,3 +1,25 @@
 <template>
-    
+	<table>
+		<tbody>
+				<template for:each={segmentCriteria} for:item="criterion" for:index="i">
+					<tr
+						key={criterion.key}
+						draggable="true"
+						class="criterion-row"
+						ondrop={drop}
+						ondragstart={dragStart}
+						ondragover={dragOver}
+						title={i}
+					>
+						<td class="sort-cell my-vertical-padding">
+							<lightning-icon size="xx-small" icon-name="action:sort" alternative-text="Sort" title={i}></lightning-icon>
+						</td>
+						<td class="my-vertical-padding">
+							<c-segment-criterion key={criterion.key} criterion={criterion}>
+							</c-segment-criterion>
+						</td>
+					</tr>
+				</template>
+		</tbody>
+	</table>
 </template>
